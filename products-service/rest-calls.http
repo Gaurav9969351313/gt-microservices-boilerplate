@@ -1,8 +1,9 @@
-POST http://localhost:8082/products-service/products HTTP/1.1
+POST http://localhost:8080/products HTTP/1.1
 Content-Type: application/json
 
 {
-    "title": "Avenger",
-    "price": 151,
+    "title": "I Phone 11",
+    "price": 155.0,
     "quantity": 2
 }
+

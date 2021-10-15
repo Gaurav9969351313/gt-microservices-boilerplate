@@ -1,0 +1,11 @@
+CQRS ==> 
+    
+Command Naming Convention
+    Create Product Command
+    <Verb> <Noun> Command
+
+Event naming convention 
+    <Noun> <PerformedAction> Event
+    ex: ProductCreatedEvent
+
+    
