@@ -40,5 +40,27 @@ in command API ==> rest controller ==> Data Sent to aggregate
 @ProcessingGroup("product-group")
 
 Logical group of event handlers 
+===================================================================================
+
+Two Types of Event Processors Modes :
+        1) Tracking :
+                pull their messages from a source using a thread that it manages itslef 
+                so aggreagate is onOne thread and event handler is on another thread 
+
+                it will retry processing the event using an incremental back off period 
+                
+        2) Subscribing :
+                Subscribe themeselves to a source of events and are invoked by the thread managed by the publishing mechanism
+                that means: Aggreagte and all the event handlers are in same thread context.
+
+                will have the exception bubble up to the publishing component of the event
+                if exception thrown the rollback occurs.
+
+                ListenerInvocationErrorHandler: 
+                        Listens for the exception and responsible for rollback
+============================================================================================= 
+
+
+
 
 
