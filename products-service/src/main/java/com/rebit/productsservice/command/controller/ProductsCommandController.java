@@ -42,11 +42,11 @@ public class ProductsCommandController {
 		
 		String returnValue;
 
-		// try {
+		try {
 			returnValue = commandGateway.sendAndWait(createProductCommand);
-		// } catch (Exception ex) {
-		// 	returnValue = ex.getLocalizedMessage();
-		// }
+		} catch (Exception ex) {
+			returnValue = ex.getLocalizedMessage();
+		}
 	
 		return returnValue;
 	}
