@@ -15,5 +15,30 @@ Java Bean ==> Controller ==> Command Gateway ==> Interceptor (for validation)
 
         1) Traditional way tohandle it using JPA at the time of capturing RequestBody
         2) in aggregate class
+====================================================================
+
+SET based consistancy validation
+--------------------------------
+lookup db table at command api side ==> Search Their before publishing event
+
+Command API[Optimized for Write] (Rest Controller => Command Handler ==> Pubish Event[ProductCreatedEvent])
+                                                    Same Event is in Event Store
+
+Query API[Optimized for Read] (Rest Controoler + QueryHandler + Events Handler ==> DB)
+
+
+
+===============================================================================
+
+in command API ==> rest controller ==> Data Sent to aggregate 
+                                   ==> Message Dispatch Interceptor 
+                                   (here it will query lookupdb table)
+                                   ==> if all good it will come to Command Handler
+                                   else xception
+
+===================================================================================
+@ProcessingGroup("product-group")
+
+Logical group of event handlers 
 
 
