@@ -1,0 +1,19 @@
+Java Bean ==> Controller ==> Command Gateway ==> Interceptor (for validation)
+                                            |
+                                            ==> Dispatch Event to Command Bus
+                                                        |
+                                                        Command Handler
+                                                        |
+                                                        |dispatch 
+                                                        |
+                                                        Event Bus
+                                                        |
+                                                        Event Handler
+
+
+3) Message Dispatch Interceptor : is used to validate message before event published.
+
+        1) Traditional way tohandle it using JPA at the time of capturing RequestBody
+        2) in aggregate class
+
+
