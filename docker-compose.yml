@@ -1,0 +1,40 @@
+version: "3"
+services:
+  axonserver:
+    image: axoniq/axonserver
+    hostname: axonserver
+    volumes:
+      - ./volumes/axonserver-data:/data
+      - ./volumes/axonserver-events:/eventdata
+      - ./volumes/axonserver-config:/config:ro
+    ports:
+      - '8024:8024'
+      - '8124:8124'
+      - '8224:8224'
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - ./volumes/db-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mc
+      MYSQL_USER: user1
+      MYSQL_PASSWORD: admin1
+    container_name: mysql
+  
+  sqlpad:
+    image: sqlpad/sqlpad:5
+    restart: always
+    environment:
+      SQLPAD_ADMIN: 'gauravtalele@gmail.com'
+      SQLPAD_ADMIN_PASSWORD: 'Qwerty@123'
+      SQLPAD_APP_LOG_LEVEL: debug
+      SQLPAD_WEB_LOG_LEVEL: warn
+    volumes:
+      - ./volumes/db-client--data:/opt/data
+    ports:
+      - 3000:3000

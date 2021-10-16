@@ -1,11 +1,14 @@
-package com.rebit.productsservice.rest.controller;
+package com.rebit.productsservice.command.controller;
 
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import com.rebit.productsservice.command.CreateProductCommand;
-import com.rebit.productsservice.rest.model.CreateProductRestModel;
+import com.rebit.productsservice.command.model.CreateProductRestModel;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,45 +19,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/products")
-public class ProductsController {
-
+@RequestMapping("/products") // http://localhost:8080/products
+public class ProductsCommandController {
+	
 	private final Environment env;
 	private final CommandGateway commandGateway;
-
-	public ProductsController(Environment env, CommandGateway commandGateway) {
+	
+	@Autowired
+	public ProductsCommandController(Environment env, CommandGateway commandGateway) {
 		this.env = env;
 		this.commandGateway = commandGateway;
 	}
-
+	
 	@PostMapping
-	public String createProduct(@RequestBody CreateProductRestModel createProductRestModel) {
-		CreateProductCommand cpc = CreateProductCommand.builder()
-				.price(createProductRestModel.getPrice())
-				.quantity(createProductRestModel.getQuantity())
-				.title(createProductRestModel.getTitle())
-				.productId(UUID.randomUUID().toString())
-				.build();
+	public String createProduct(@Valid @RequestBody CreateProductRestModel createProductRestModel) {
+		
+		CreateProductCommand createProductCommand = CreateProductCommand.builder()
+		.price(createProductRestModel.getPrice())
+		.quantity(createProductRestModel.getQuantity())
+		.title(createProductRestModel.getTitle())
+		.productId(UUID.randomUUID().toString()).build();
 		
 		String returnValue;
-		returnValue = commandGateway.sendAndWait(cpc);
-		System.out.println("==============>" + returnValue);
 
-		return returnValue.toString();
+		// try {
+			returnValue = commandGateway.sendAndWait(createProductCommand);
+		// } catch (Exception ex) {
+		// 	returnValue = ex.getLocalizedMessage();
+		// }
+	
+		return returnValue;
 	}
-
+	
 	@GetMapping
 	public String getProduct() {
 		return "HTTP GET Handled " + env.getProperty("local.server.port");
 	}
-
+	
 	@PutMapping
 	public String updateProduct() {
 		return "HTTP PUT Handled";
 	}
-
+	
 	@DeleteMapping
 	public String deleteProduct() {
 		return "HTTP DELETE handled";
 	}
+
 }
